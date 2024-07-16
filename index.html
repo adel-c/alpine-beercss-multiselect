@@ -25,7 +25,7 @@
 
   <script>
     document.addEventListener("alpine:init", () => {
-      Alpine.data("alpineMuliSelect", () => ({
+      Alpine.data("customSelect", () => ({
         text: '',
         show: false,
         multiple: false,
@@ -61,7 +61,6 @@
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
           this.updatedDisplayedOptions();
-
           const selectedOptions = this.allOptions.filter(o => o.selected);
           let selectedLength = selectedOptions.length;
           if (selectedLength === 0) {
@@ -105,12 +104,12 @@
 <!-- Add your site or application content here -->
 <p>Hello world! This is HTML5 Boilerplate.</p>
 
-<div class="w-full" x-data="alpineMuliSelect()" style="width: 80%">
+<div class="w-full" x-data="customSelect()" style="width: 80%">
 
 
   <!-- Select Options -->
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
-          @change.debounce.300ms="console.log('eazeazeza')"
+          @change.debounce.300ms="console.log('select updated',$event)"
   autocomplete="off">
     <option value="te_1">Arsenal</option>
     <option value="te_2">Aston Villa</option>
