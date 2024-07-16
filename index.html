@@ -57,7 +57,13 @@
         },
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
-            return {value: o.value, text: o.innerHTML, selected: o.selected}
+            console.log(o)
+            let attribute = o.attributes["data-content"];
+            let text= o.innerHTML;
+            if(attribute && attribute.value){
+              text = attribute.value
+            }
+            return {value: o.value, text: text, selected: o.selected}
           })
           this.updatedDisplayedOptions();
           const selectedOptions = this.allOptions.filter(o => o.selected);
@@ -105,7 +111,7 @@
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('select updated',$event)"
   autocomplete="off">
-    <option value="te_1">Arsenal</option>
+    <option value="te_1" data-content=" <strong>machin</strong> truc">Arsenal</option>
     <option value="te_2">Aston Villa</option>
     <option value="te_3" selected>Brentford</option>
     <option value="te_4" >C</option>
@@ -122,7 +128,7 @@
           <i>search</i>
         </div>
         <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-text="op.text">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.text">
         </a>
           <div class="divider"></div>
         </template>
