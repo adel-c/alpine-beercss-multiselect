@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
-  <link rel="stylesheet" href="css/style.css">
   <meta name="description" content="">
 
   <meta property="og:title" content="">
@@ -113,10 +112,8 @@
   </select>
 
   <div class="field border" x-bind="component" >
-    <input x-model="text" placeholder="machin" readonly/>
+    <input x-model="text" placeholder="place" readonly/>
     <i>arrow_drop_down</i>
-
-
       <article
         x-show="show"
         style="width: 100%;margin: 0 ;display: none">
@@ -124,16 +121,12 @@
           <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
           <i>search</i>
         </div>
-
         <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-text="op.text">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.text">
         </a>
           <div class="divider"></div>
         </template>
       </article>
-
-
-
   </div>
 </div>
 
