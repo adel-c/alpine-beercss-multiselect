@@ -112,23 +112,28 @@
     <option value="te_4" >C</option>
   </select>
 
-  <div class="field border" x-bind="component">
+  <div class="field border" x-bind="component" >
     <input x-model="text" placeholder="machin" readonly/>
     <i>arrow_drop_down</i>
-    <menu class="no-wrap"
-          :class="{'active':show}"
-          style="width: 100%">
-      <div class="field label border " style="margin: 1rem; " x-show="showSearch">
-        <input type="text" autocomplete="off" placeholder="" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
-        <label>Search</label>
-        <i>search</i>
-      </div>
 
-      <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text">
+
+      <article
+        x-show="show"
+        style="width: 100%;margin: 0 ;display: none">
+        <div class="field border " style="margin: 1rem; " x-show="showSearch">
+          <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
+          <i>search</i>
+        </div>
+
+        <template x-for="op in displayedOptions">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-text="op.text">
         </a>
-      </template>
-    </menu>
+          <div class="divider"></div>
+        </template>
+      </article>
+
+
+
   </div>
 </div>
 
