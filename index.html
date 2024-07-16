@@ -21,36 +21,28 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#fafafa">
   <script src="//unpkg.com/alpinejs" defer></script>
-  <link href="https://cdn.jsdelivr.net/npm/beercss@3.6.8/dist/cdn/beer.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/beercss@3.6.8/dist/cdn/beer.min.css" rel="stylesheet"/>
 
   <script>
     document.addEventListener("alpine:init", () => {
-      Alpine.data("alpineMuliSelect", (obj) => ({
-        displayText: '',
-        displayMenu: false,
-        handleMultiple: false,
+      Alpine.data("alpineMuliSelect", () => ({
+        text: '',
+        show: false,
+        multiple: false,
         allOptions: [],
         'toggle'(v) {
           console.log("toggle value", v)
         },
-
-        'displayValue': {
-
-        },
-        'SomeButton': {
-
-        },
-
         optionArray() {
           return [...this.$refs.sourceSelect.options]
         },
         'toggleValue'(v) {
           let filter = this.optionArray().filter(o => o.value === v)[0];
-         if(filter.selected){
-           filter.selected=undefined
-         } else{
-           filter.selected = 'selected';
-         }
+          if (filter.selected) {
+            filter.selected = undefined
+          } else {
+            filter.selected = 'selected';
+          }
           this.$refs.sourceSelect.dispatchEvent(new Event('change', {bubbles: true}))
           this.updateAllOptions();
 
@@ -59,25 +51,23 @@
           this.allOptions = this.optionArray().map(o => {
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
-          const a = this.allOptions.filter(o=>o.selected).length;
-          if(a == 0){
-            this.displayText="";
-          }else{
-            this.displayText=a+" selected";
+          const a = this.allOptions.filter(o => o.selected).length;
+          if (a === 0) {
+            this.text = "";
+          } else {
+            this.text = a + " selected";
           }
 
         },
         component: {
           ['@click']() {
-            this.displayMenu = true;
+            this.show = true;
           },
-
-        },
-        dropdown: {
           ['@click.away']() {
-            this.displayMenu = false;
+            this.show = false;
           }
         },
+
         // Initializing component
         init() {
           handleMultiple = this.$refs.sourceSelect.multiple
@@ -96,7 +86,7 @@
 <!-- Add your site or application content here -->
 <p>Hello world! This is HTML5 Boilerplate.</p>
 
-<div class="w-full" x-data="alpineMuliSelect()">
+<div class="w-full" x-data="alpineMuliSelect()" style="width: 80%">
 
 
   <!-- Select Options -->
@@ -107,13 +97,12 @@
     <option value="te_3" selected>Brentford</option>
   </select>
 
-  <div class="field border" style="width: 80%" x-bind="component">
-    <input x-model="displayText" placeholder="machin"/>
+  <div class="field border" x-bind="component">
+    <input x-model="text" placeholder="machin"/>
 
     <i>arrow_drop_down</i>
     <menu class="no-wrap"
-          :class="{'active':displayMenu}"
-          x-bind="dropdown"
+          :class="{'active':show}"
           style="width: 100%">
       <template x-for="op in allOptions">
         <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text">
