@@ -42,14 +42,13 @@
           return [...this.$refs.sourceSelect.options]
         },
         'toggleValue'(v) {
-          console.log('toggle', v)
           let filter = this.optionArray().filter(o => o.value === v)[0];
          if(filter.selected){
            filter.selected=undefined
          } else{
            filter.selected = 'selected';
          }
-
+          this.$refs.sourceSelect.dispatchEvent(new Event('change', {bubbles: true}))
           this.updateAllOptions();
 
         },
@@ -58,13 +57,16 @@
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
           const a = this.allOptions.filter(o=>o.selected).length;
-          this.displayText=a+" selected";
+          if(a == 0){
+            this.displayText="";
+          }else{
+            this.displayText=a+" selected";
+          }
+
         },
         // Initializing component
         init() {
-          console.log("obj", obj)
           this.updateAllOptions();
-          console.log("all options", this.allOptions)
         },
       }));
     });
@@ -83,19 +85,19 @@
 
 
   <!-- Select Options -->
-  <select name="truc" multiple x-ref="sourceSelect">
+  <select name="truc" multiple x-ref="sourceSelect" @change.debounce.300ms="console.log('eazeazeza')">
     <option value="te_1">Arsenal</option>
     <option value="te_2">Aston Villa</option>
     <option value="te_3" selected>Brentford</option>
   </select>
 
   <div class="field border">
-    <input x-model="displayText"/>
+    <input x-model="displayText" placeholder="machin"/>
 
     <i>arrow_drop_down</i>
     <menu class="no-wrap" x-bind="SomeButton">
       <template x-for="op in allOptions">
-        <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text + op.selected">
+        <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text">
         </a>
       </template>
     </menu>
