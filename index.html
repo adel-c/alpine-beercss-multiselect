@@ -27,6 +27,8 @@
     document.addEventListener("alpine:init", () => {
       Alpine.data("alpineMuliSelect", (obj) => ({
         displayText: '',
+        displayMenu: false,
+        handleMultiple: false,
         allOptions: [],
         'toggle'(v) {
           console.log("toggle value", v)
@@ -38,6 +40,7 @@
         'SomeButton': {
 
         },
+
         optionArray() {
           return [...this.$refs.sourceSelect.options]
         },
@@ -64,8 +67,20 @@
           }
 
         },
+        component: {
+          ['@click']() {
+            this.displayMenu = true;
+          },
+
+        },
+        dropdown: {
+          ['@click.away']() {
+            this.displayMenu = false;
+          }
+        },
         // Initializing component
         init() {
+          handleMultiple = this.$refs.sourceSelect.multiple
           this.updateAllOptions();
         },
       }));
@@ -85,17 +100,21 @@
 
 
   <!-- Select Options -->
-  <select name="truc" multiple x-ref="sourceSelect" @change.debounce.300ms="console.log('eazeazeza')">
+  <select style="display: none" name="truc" multiple x-ref="sourceSelect"
+          @change.debounce.300ms="console.log('eazeazeza')">
     <option value="te_1">Arsenal</option>
     <option value="te_2">Aston Villa</option>
     <option value="te_3" selected>Brentford</option>
   </select>
 
-  <div class="field border">
+  <div class="field border" style="width: 80%" x-bind="component">
     <input x-model="displayText" placeholder="machin"/>
 
     <i>arrow_drop_down</i>
-    <menu class="no-wrap" x-bind="SomeButton">
+    <menu class="no-wrap"
+          :class="{'active':displayMenu}"
+          x-bind="dropdown"
+          style="width: 100%">
       <template x-for="op in allOptions">
         <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text">
         </a>
