@@ -74,11 +74,11 @@
         },
         component: {
           ['@click']() {
-            this.search='';
-            this.updatedDisplayedOptions()
             this.show = true;
           },
           ['@click.away']() {
+            this.search='';
+            this.updatedDisplayedOptions()
             this.show = false;
           }
         },
