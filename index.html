@@ -50,15 +50,17 @@
           this.updateComponent();
 
         },
+        updatedDisplayedOptions() {
+          this.displayedOptions = this.allOptions.filter(o => !this.search ||
+            o.text.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
+            o.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1);
+        },
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
+          this.updatedDisplayedOptions();
 
-          this.displayedOptions = this.allOptions.filter(o => !this.search ||
-            o.text.indexOf(this.search) > -1 ||
-            o.value.indexOf(this.search) > -1);
-          // this.displayedOptions = this.allOptions
           const selectedOptions = this.allOptions.filter(o => o.selected);
           let selectedLength = selectedOptions.length;
           if (selectedLength === 0) {
@@ -72,6 +74,8 @@
         },
         component: {
           ['@click']() {
+            this.search='';
+            this.updatedDisplayedOptions()
             this.show = true;
           },
           ['@click.away']() {
@@ -116,6 +120,12 @@
     <menu class="no-wrap"
           :class="{'active':show}"
           style="width: 100%">
+      <div class="field label border " style="margin: 1rem; ">
+        <input type="text" autocomplete="off" placeholder="" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
+        <label>Search</label>
+        <i>search</i>
+      </div>
+
       <template x-for="op in displayedOptions">
         <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text">
         </a>
