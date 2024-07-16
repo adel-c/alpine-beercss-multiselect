@@ -13,9 +13,6 @@
   <meta property="og:image" content="">
   <meta property="og:image:alt" content="">
 
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
 
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#fafafa">
@@ -57,13 +54,13 @@
         },
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
-            console.log(o)
             let attribute = o.attributes["data-content"];
             let text= o.innerHTML;
+            let content = text;
             if(attribute && attribute.value){
-              text = attribute.value
+              content = attribute.value
             }
-            return {value: o.value, text: text, selected: o.selected}
+            return {value: o.value, content:content ,text: text, selected: o.selected}
           })
           this.updatedDisplayedOptions();
           const selectedOptions = this.allOptions.filter(o => o.selected);
@@ -128,7 +125,7 @@
           <i>search</i>
         </div>
         <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.text">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content">
         </a>
           <div class="divider"></div>
         </template>
