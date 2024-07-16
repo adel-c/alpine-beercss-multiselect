@@ -30,14 +30,12 @@
         show: false,
         multiple: false,
         allOptions: [],
-        'toggle'(v) {
-          console.log("toggle value", v)
-        },
+        displayedOptions: [],
+        search: '',
         htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
         'toggleValue'(v) {
-
           let options = this.htmlOptions();
           let filter = options.filter(o => o.value === v)[0];
           if (filter.selected) {
@@ -56,6 +54,11 @@
           this.allOptions = this.htmlOptions().map(o => {
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
+
+          this.displayedOptions = this.allOptions.filter(o => !this.search ||
+            o.text.indexOf(this.search) > -1 ||
+            o.value.indexOf(this.search) > -1);
+          // this.displayedOptions = this.allOptions
           const selectedOptions = this.allOptions.filter(o => o.selected);
           let selectedLength = selectedOptions.length;
           if (selectedLength === 0) {
@@ -107,13 +110,13 @@
   </select>
 
   <div class="field border" x-bind="component">
-    <input x-model="text" placeholder="machin"/>
+    <input x-model="text" placeholder="machin" readonly/>
 
     <i>arrow_drop_down</i>
     <menu class="no-wrap"
           :class="{'active':show}"
           style="width: 100%">
-      <template x-for="op in allOptions">
+      <template x-for="op in displayedOptions">
         <a :class="{'fill':op.selected}" @click="toggleValue(op.value)" x-text="op.text">
         </a>
       </template>
