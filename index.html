@@ -101,13 +101,8 @@
 
 <body>
 
-<!-- Add your site or application content here -->
-<p>Hello world! This is HTML5 Boilerplate.</p>
+<div  x-data="customSelect()" style="width: 80%">
 
-<div class="w-full" x-data="customSelect()" style="width: 80%">
-
-
-  <!-- Select Options -->
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('select updated',$event)"
   autocomplete="off">
@@ -137,8 +132,6 @@
   </div>
 </div>
 
-
-<script src="js/app.js"></script>
 </body>
 
 </html>
