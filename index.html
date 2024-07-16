@@ -32,6 +32,7 @@
         allOptions: [],
         displayedOptions: [],
         search: '',
+        showSearch: true,
         htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
@@ -87,6 +88,9 @@
         init() {
           this.multiple = this.$refs.sourceSelect.multiple
           this.updateComponent();
+          if (this.allOptions.length < 4) {
+            this.showSearch = false;
+          }
         },
       }));
     });
@@ -105,22 +109,22 @@
 
 
   <!-- Select Options -->
-  <select style="display: none" name="truc" multiple x-ref="sourceSelect"
+  <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('eazeazeza')"
   autocomplete="off">
     <option value="te_1">Arsenal</option>
     <option value="te_2">Aston Villa</option>
     <option value="te_3" selected>Brentford</option>
+    <option value="te_4" >C</option>
   </select>
 
   <div class="field border" x-bind="component">
     <input x-model="text" placeholder="machin" readonly/>
-
     <i>arrow_drop_down</i>
     <menu class="no-wrap"
           :class="{'active':show}"
           style="width: 100%">
-      <div class="field label border " style="margin: 1rem; ">
+      <div class="field label border " style="margin: 1rem; " x-show="showSearch">
         <input type="text" autocomplete="off" placeholder="" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
         <label>Search</label>
         <i>search</i>
