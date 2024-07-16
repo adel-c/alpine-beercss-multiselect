@@ -26,6 +26,7 @@
   <script>
     document.addEventListener("alpine:init", () => {
       Alpine.data("alpineMuliSelect", (obj) => ({
+        displayText: '',
         allOptions: [],
         'toggle'(v) {
           console.log("toggle value", v)
@@ -37,23 +38,27 @@
         'SomeButton': {
 
         },
+        optionArray() {
+          return [...this.$refs.sourceSelect.options]
+        },
         'toggleValue'(v) {
           console.log('toggle', v)
-          let select = this.$refs.sourceSelect;
-          let filter = [...select.options].filter(o => o.value === v)[0];
+          let filter = this.optionArray().filter(o => o.value === v)[0];
          if(filter.selected){
            filter.selected=undefined
          } else{
            filter.selected = 'selected';
          }
 
-          this.updateAllOptions()
+          this.updateAllOptions();
+
         },
         updateAllOptions() {
-          let select = this.$refs.sourceSelect;
-          this.allOptions = [...select.options].map(o => {
+          this.allOptions = this.optionArray().map(o => {
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
+          const a = this.allOptions.filter(o=>o.selected).length;
+          this.displayText=a+" selected";
         },
         // Initializing component
         init() {
@@ -65,9 +70,7 @@
     });
   </script>
   <style>
-    .red {
-      background-color: red;
-    }
+
   </style>
 </head>
 
@@ -75,13 +78,7 @@
 
 <!-- Add your site or application content here -->
 <p>Hello world! This is HTML5 Boilerplate.</p>
-<div class="field ">
-  <select name="truc" multiple id="machin2" autocomplete="off">
-    <option value="te_1">Arsenal</option>
-    <option value="te_2">Aston Villa</option>
-    <option value="te_3" selected>Brentford</option>
-  </select>
-</div>
+
 <div class="w-full" x-data="alpineMuliSelect()">
 
 
@@ -92,8 +89,9 @@
     <option value="te_3" selected>Brentford</option>
   </select>
 
-  <button>
-    <span x-bind="displayValue">No-wrap</span>
+  <div class="field border">
+    <input x-model="displayText"/>
+
     <i>arrow_drop_down</i>
     <menu class="no-wrap" x-bind="SomeButton">
       <template x-for="op in allOptions">
@@ -101,7 +99,7 @@
         </a>
       </template>
     </menu>
-  </button>
+  </div>
 </div>
 
 
