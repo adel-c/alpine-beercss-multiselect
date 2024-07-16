@@ -33,29 +33,37 @@
         'toggle'(v) {
           console.log("toggle value", v)
         },
-        optionArray() {
+        htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
         'toggleValue'(v) {
-          let filter = this.optionArray().filter(o => o.value === v)[0];
+
+          let options = this.htmlOptions();
+          let filter = options.filter(o => o.value === v)[0];
           if (filter.selected) {
             filter.selected = undefined
           } else {
+            if (!this.multiple) {
+              options.forEach(o => o.selected = undefined)
+            }
             filter.selected = 'selected';
           }
           this.$refs.sourceSelect.dispatchEvent(new Event('change', {bubbles: true}))
-          this.updateAllOptions();
+          this.updateComponent();
 
         },
-        updateAllOptions() {
-          this.allOptions = this.optionArray().map(o => {
+        updateComponent() {
+          this.allOptions = this.htmlOptions().map(o => {
             return {value: o.value, text: o.innerHTML, selected: o.selected}
           })
-          const a = this.allOptions.filter(o => o.selected).length;
-          if (a === 0) {
+          const selectedOptions = this.allOptions.filter(o => o.selected);
+          let selectedLength = selectedOptions.length;
+          if (selectedLength === 0) {
             this.text = "";
+          } else if (selectedLength === 1) {
+            this.text = selectedOptions[0].text
           } else {
-            this.text = a + " selected";
+            this.text = selectedLength + " selected";
           }
 
         },
@@ -70,8 +78,8 @@
 
         // Initializing component
         init() {
-          handleMultiple = this.$refs.sourceSelect.multiple
-          this.updateAllOptions();
+          this.multiple = this.$refs.sourceSelect.multiple
+          this.updateComponent();
         },
       }));
     });
@@ -91,7 +99,8 @@
 
   <!-- Select Options -->
   <select style="display: none" name="truc" multiple x-ref="sourceSelect"
-          @change.debounce.300ms="console.log('eazeazeza')">
+          @change.debounce.300ms="console.log('eazeazeza')"
+  autocomplete="off">
     <option value="te_1">Arsenal</option>
     <option value="te_2">Aston Villa</option>
     <option value="te_3" selected>Brentford</option>
