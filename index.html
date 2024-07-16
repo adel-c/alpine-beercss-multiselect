@@ -53,7 +53,6 @@
         },
         // Initializing component
         init() {
-          debugger
           console.log("obj", obj)
           const options = document.getElementById(this.elementId).options;
 
@@ -161,6 +160,27 @@
 <p>Hello world! This is HTML5 Boilerplate.</p>
 
 <div class="w-full" x-data="alpineMuliSelect({selected:['te_11', 'te_12'], elementId:'multSelect'})">
+  <div class="field large prefix round fill">
+
+    <input>
+    <i class="front">arrow_down</i>
+    <menu class="min">
+      <div class="field large prefix suffix no-margin fixed">
+        <i class="front">arrow_back</i>
+        <input>
+        <i class="front">close</i>
+      </div>
+      <a class="row">
+        <div>te_1</div>
+      </a>
+      <a class="row">
+        <div>te_2</div>
+      </a>
+      <a class="row">
+        <div>te_5</div>
+      </a>
+    </menu>
+  </div>
 
   <!-- Select Options -->
   <select id="multSelect" multiple x-bind="SomeButton">
