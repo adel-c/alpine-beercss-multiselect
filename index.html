@@ -25,6 +25,15 @@
     }
     document.addEventListener("alpine:init", () => {
       Alpine.data("customSelect", (args) => ({
+        /**
+         * @typedef Displayableoption
+         * @type {object}
+         * @property {string} value - the option value.
+         * @property {string} text - the option innerHTML.
+         * @property {string} content - a string that contains the return of the method optionTransformer.
+         * @property {boolean} selected.
+         */
+
         text: '',
         placeholder: args?.placeholder || '',
         optionTransformer: args?.optionTransformer || ((id, text) => {
@@ -32,9 +41,13 @@
         }),
         show: false,
         multiple: false,
+        /** @type {Displayableoption[]} */
         allOptions: [],
         search: '',
         showSearch: true,
+        /**
+         * @return HTMLOptionElement[]
+         */
         htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
@@ -88,7 +101,7 @@
           this.allOptions = this.htmlOptions().map(o => {
             let text = o.innerHTML;
             let content = this.optionTransformer(o.value, o.innerHTML);
-            return {value: o.value, content: content, text: text, selected: o.selected, show: true}
+            return {value: o.value, content: content, text: text, selected: o.selected}
           })
           this.updateTextbox();
 
