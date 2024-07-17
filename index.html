@@ -28,13 +28,19 @@
 
     document.addEventListener("alpine:init", () => {
       /**
+       * @typedef Displayableoption
+       * @type {object}
+       * @property {string} value - the option value.
+       * @property {string} text - the option innerHTML.
+       * @property {string} content - a string that contains the return of the method optionTransformer.
+       * @property {boolean} selected.
+       */
+      /**
        * @typedef TransformerFunction
        * @type {function}
        * @param {string} value - the option value
        * @param {string} innerHTML - the option innerHTML
        * @return {string}    a string(and html) that will be injected in the dropdown.
-
-
        */
       /**
        * @typedef customSelectArgs
@@ -42,26 +48,15 @@
        * @property {string} placehoder - the text displayed when no element is selected.
        * @property {TransformerFunction} optionTransformer - a function that take an
        *            option value and innerHTML and return a string(and html) that will be injected in the dropdown.
-
        */
       Alpine.data("customSelect",
         /**
-         *
-          * @param args
-         * @return {{init(): void, htmlOptions(): HTMLOptionElement[], toggleValue(*): void, updateTextbox(): void, optionIsVisible(HTMLOptionElement): boolean, show: boolean, multiple: boolean, allOptions: Displayableoption[], search: string, component: {"@click"(*): void, "@click.away"(): void}, setSelect(*, *): void, showSearch: boolean, optionTransformer: ((function(String, String): String)|(function(*, *): *)|*|(function(*, *): *)), text: string, placeholder: (*|string), updateComponent(): void, defaultComponent: {"x-html"(): string}}}
+         * @param {customSelectArgs} args
          */
         (args) => ({
-        /**
-         * @typedef Displayableoption
-         * @type {object}
-         * @property {string} value - the option value.
-         * @property {string} text - the option innerHTML.
-         * @property {string} content - a string that contains the return of the method optionTransformer.
-         * @property {boolean} selected.
-         */
-
         text: '',
         placeholder: args?.placeholder || '',
+          /** @type {TransformerFunction} */
         optionTransformer: args?.optionTransformer ||
           ((id, text) => {
           return text
@@ -87,10 +82,13 @@
             option.selected = false;
           }
         },
-
-        toggleValue(v) {
+          /**
+           *
+           * @param {string}optionValue the option value to toggle
+           */
+          toggleValue(optionValue) {
           let options = this.htmlOptions();
-          let filter = options.filter(o => o.value === v)[0];
+            let filter = options.filter(o => o.value === optionValue)[0];
           if (filter.selected) {
             this.setSelect(filter,false)
           } else {
