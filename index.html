@@ -21,8 +21,9 @@
 
   <script>
     document.addEventListener("alpine:init", () => {
-      Alpine.data("customSelect", () => ({
+      Alpine.data("customSelect", (args) => ({
         text: '',
+        placeholder: args?.placeholder || '',
         show: false,
         multiple: false,
         allOptions: [],
@@ -107,7 +108,7 @@
 
 <body>
 Sample with multiple choice
-<div  x-data="customSelect()" style="width: 80%">
+<div  x-data="customSelect({placeholder:'testPlaceHolder'})" style="width: 80%">
 
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('select updated',$event)"
@@ -119,7 +120,7 @@ Sample with multiple choice
   </select>
 
   <div class="field border" x-bind="component" >
-    <input x-model="text" placeholder="place" readonly/>
+    <input x-model="text" x-bind:placeholder="placeholder" readonly/>
     <i>arrow_drop_down</i>
       <article
         x-show="show"
@@ -150,7 +151,7 @@ Sample with single choice
   </select>
 
   <div class="field border" x-bind="component">
-    <input x-model="text" placeholder="place" readonly/>
+    <input x-model="text" x-bind:placeholder="placeholder" readonly/>
     <i>arrow_drop_down</i>
     <article
       x-show="show"
