@@ -20,6 +20,9 @@
   <link href="https://cdn.jsdelivr.net/npm/beercss@3.6.8/dist/cdn/beer.min.css" rel="stylesheet"/>
 
   <script>
+    function addStrong(id, label) {
+      return `<strong>${label}</strong>`;
+    }
     document.addEventListener("alpine:init", () => {
       Alpine.data("customSelect", (args) => ({
         text: '',
@@ -146,7 +149,7 @@
 
 <body>
 Sample with multiple choice
-<div  x-data="customSelect({placeholder:'testPlaceHolder'})" style="width: 80%">
+<div x-data="customSelect({placeholder:'testPlaceHolder',optionContentFn:addStrong})" style="width: 80%">
 
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('select updated',$event)"
