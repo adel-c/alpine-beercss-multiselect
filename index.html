@@ -161,6 +161,9 @@
           }
         },
         component: {
+          /**
+           * @param {MouseEvent} $event
+           */
           ['@click']($event) {
             let target = $event.target;
             if (target.tagName.toUpperCase() === 'INPUT' && target.hasAttribute("readonly")) {
