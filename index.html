@@ -24,6 +24,9 @@
       Alpine.data("customSelect", (args) => ({
         text: '',
         placeholder: args?.placeholder || '',
+        optionContentFn: args?.optionContentFn || ((id, text) => {
+          return text
+        }),
         show: false,
         multiple: false,
         allOptions: [],
@@ -67,7 +70,8 @@
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
             let text= o.innerHTML;
-            return {value: o.value, content:text ,text: text, selected: o.selected}
+            let content = this.optionContentFn(o.value,o.innerHTML);
+            return {value: o.value, content:content ,text: text, selected: o.selected}
           })
           this.updatedDisplayedOptions();
           const selectedOptions = this.allOptions.filter(o => o.selected);
