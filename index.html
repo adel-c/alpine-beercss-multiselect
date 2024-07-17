@@ -33,7 +33,6 @@
         show: false,
         multiple: false,
         allOptions: [],
-        displayedOptions: [],
         search: '',
         showSearch: true,
         htmlOptions() {
@@ -66,15 +65,20 @@
 
         },
         updatedDisplayedOptions() {
-          this.displayedOptions = this.allOptions.filter(o => !this.search ||
+          this.allOptions.forEach(o => {
+            let show = !this.search ||
             o.text.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
-            o.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1);
+            o.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+
+            o.show=show;
+          })
         },
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
             let text= o.innerHTML;
             let content = this.optionTransformer(o.value,o.innerHTML);
-            return {value: o.value, content:content ,text: text, selected: o.selected}
+
+            return {value: o.value, content:content ,text: text, selected: o.selected, show:true}
           })
           this.updatedDisplayedOptions();
           const selectedOptions = this.allOptions.filter(o => o.selected);
@@ -101,8 +105,8 @@
           <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
           <i>search</i>
         </div>
-        <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content">
+        <template x-for="op in allOptions">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content" x-show="op.show">
         </a>
           <div class="divider"></div>
         </template>
@@ -169,8 +173,8 @@ Sample with multiple choice
           <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
           <i>search</i>
         </div>
-        <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content">
+        <template x-for="op in allOptions">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content" x-show="op.show">
         </a>
           <div class="divider"></div>
         </template>
