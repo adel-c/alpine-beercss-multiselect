@@ -38,7 +38,6 @@
         htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
-        bind: {},
         setSelect(option, selected) {
           if (selected) {
             option.setAttribute("selected", "selected");
@@ -69,19 +68,11 @@
          * @return boolean
          */
         optionIsVisible(option) {
-          let b = !this.search ||
+          return !this.search ||
             option.text.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
             option.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-          // console.log("optionIsVisible",option,"with result",b)
-          return b;
         },
-        updateComponent() {
-          this.allOptions = this.htmlOptions().map(o => {
-            let text= o.innerHTML;
-            let content = this.optionTransformer(o.value,o.innerHTML);
-
-            return {value: o.value, content:content ,text: text, selected: o.selected, show:true}
-          })
+        updateTextbox() {
           const selectedOptions = this.allOptions.filter(o => o.selected);
           let selectedLength = selectedOptions.length;
           if (selectedLength === 0) {
@@ -91,6 +82,14 @@
           } else {
             this.text = selectedLength + " selected";
           }
+        },
+        updateComponent() {
+          this.allOptions = this.htmlOptions().map(o => {
+            let text = o.innerHTML;
+            let content = this.optionTransformer(o.value, o.innerHTML);
+            return {value: o.value, content: content, text: text, selected: o.selected, show: true}
+          })
+          this.updateTextbox();
 
         },
         defaultComponent: {
