@@ -33,6 +33,7 @@
         htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
+        bind: {},
         setSelect(option, selected) {
           if (selected) {
             option.setAttribute("selected", "selected");
@@ -80,6 +81,29 @@
           }
 
         },
+        defaultComponent: {
+          ['x-html']() {
+            return `
+ <div class="field border" x-bind="component" >
+    <input x-model="text" x-bind:placeholder="placeholder" readonly/>
+    <i>arrow_drop_down</i>
+      <article
+        x-show="show"
+        style="width: 100%;margin: 0 ;display: none;z-index: 99">
+        <div class="field border " style="margin: 1rem; " x-show="showSearch">
+          <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
+          <i>search</i>
+        </div>
+        <template x-for="op in displayedOptions">
+        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content">
+        </a>
+          <div class="divider"></div>
+        </template>
+      </article>
+  </div>
+            `
+          }
+        },
         component: {
           ['@click']($event) {
             let target = $event.target;
@@ -97,6 +121,7 @@
             this.updatedDisplayedOptions()
             this.show = false;
           }
+
         },
 
         // Initializing component
@@ -127,7 +152,6 @@ Sample with multiple choice
     <option value="te_3" selected>Brentford</option>
     <option value="te_4" >C</option>
   </select>
-
   <div class="field border" x-bind="component" >
     <input x-model="text" x-bind:placeholder="placeholder" readonly/>
     <i>arrow_drop_down</i>
@@ -158,27 +182,9 @@ Sample with single choice
     <option value="te_3" selected>Brentford</option>
     <option value="te_4">C</option>
   </select>
-
-  <div class="field border" x-bind="component">
-    <input x-model="text" x-bind:placeholder="placeholder" readonly/>
-    <i>arrow_drop_down</i>
-    <article
-      x-show="show"
-      style="width: 100%;margin: 0 ;display: none; z-index: 99">
-      <div class="field border " style="margin: 1rem; " x-show="showSearch">
-        <input type="text" autocomplete="off" placeholder="Filter" x-model="search"
-               x-on:keyup.debounce="updatedDisplayedOptions()">
-        <i>search</i>
-      </div>
-      <template x-for="op in displayedOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content">
-        </a>
-        <div class="divider"></div>
-      </template>
-    </article>
+  <div x-bind="defaultComponent">
   </div>
 </div>
-
 </body>
 
 </html>
