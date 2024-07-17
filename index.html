@@ -106,15 +106,17 @@
           <input type="text" autocomplete="off" placeholder="Filter" x-model="search">
           <i>search</i>
         </div>
+        <ul style="list-style: none">
         <template x-for="op in allOptions">
-        <a class="row wave"
+        <li  x-show="optionIsVisible(op)"><a class="row wave"
         :class="{'fill':op.selected}"
         @click="toggleValue(op.value)"
         x-html="op.content"
-        x-show="optionIsVisible(op)">
-        </a>
+       >
+        </a></li>
           <div class="divider"></div>
         </template>
+        </ul>
       </article>
   </div>
             `
