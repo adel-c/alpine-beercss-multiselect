@@ -27,7 +27,7 @@
       Alpine.data("customSelect", (args) => ({
         text: '',
         placeholder: args?.placeholder || '',
-        optionContentFn: args?.optionContentFn || ((id, text) => {
+        optionTransformer: args?.optionTransformer || ((id, text) => {
           return text
         }),
         show: false,
@@ -73,7 +73,7 @@
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
             let text= o.innerHTML;
-            let content = this.optionContentFn(o.value,o.innerHTML);
+            let content = this.optionTransformer(o.value,o.innerHTML);
             return {value: o.value, content:content ,text: text, selected: o.selected}
           })
           this.updatedDisplayedOptions();
@@ -149,7 +149,7 @@
 
 <body>
 Sample with multiple choice
-<div x-data="customSelect({placeholder:'testPlaceHolder',optionContentFn:addStrong})" style="width: 80%">
+<div x-data="customSelect({placeholder:'testPlaceHolder',optionTransformer:addStrong})" style="width: 80%">
 
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('select updated',$event)"
