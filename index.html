@@ -33,17 +33,26 @@
         htmlOptions() {
           return [...this.$refs.sourceSelect.options]
         },
+        setSelect(option, selected) {
+          if (selected) {
+            option.setAttribute("selected", "selected");
+            option.selected = true;
+          } else {
+            option.removeAttribute("selected");
+            option.selected = false;
+          }
+        },
         'toggleValue'(v) {
           let options = this.htmlOptions();
           let filter = options.filter(o => o.value === v)[0];
           if (filter.selected) {
-            filter.selected = undefined
+            this.setSelect(filter,false)
           } else {
             if (!this.multiple) {
-              options.forEach(o => o.selected = undefined);
+              options.forEach(o => this.setSelect(o,false));
               this.show = false;
             }
-            filter.selected = 'selected';
+            this.setSelect(filter,true)
           }
           this.$refs.sourceSelect.dispatchEvent(new Event('change', {bubbles: true}))
           this.updateComponent();
