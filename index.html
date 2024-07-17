@@ -64,14 +64,16 @@
           this.updateComponent();
 
         },
-        updatedDisplayedOptions() {
-          this.allOptions.forEach(o => {
-            let show = !this.search ||
-            o.text.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
-            o.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-
-            o.show=show;
-          })
+        /**
+         * @param {HTMLOptionElement} option
+         * @return boolean
+         */
+        optionIsVisible(option) {
+          let b = !this.search ||
+            option.text.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
+            option.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+          // console.log("optionIsVisible",option,"with result",b)
+          return b;
         },
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
@@ -80,7 +82,6 @@
 
             return {value: o.value, content:content ,text: text, selected: o.selected, show:true}
           })
-          this.updatedDisplayedOptions();
           const selectedOptions = this.allOptions.filter(o => o.selected);
           let selectedLength = selectedOptions.length;
           if (selectedLength === 0) {
@@ -102,7 +103,7 @@
         x-show="show"
         style="width: 100%;margin: 0 ;display: none;z-index: 99">
         <div class="field border " style="margin: 1rem; " x-show="showSearch">
-          <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
+          <input type="text" autocomplete="off" placeholder="Filter" x-model="search">
           <i>search</i>
         </div>
         <template x-for="op in allOptions">
@@ -110,7 +111,7 @@
         :class="{'fill':op.selected}"
         @click="toggleValue(op.value)"
         x-html="op.content"
-        x-show="op.show">
+        x-show="optionIsVisible(op)">
         </a>
           <div class="divider"></div>
         </template>
@@ -126,14 +127,12 @@
               this.show = !this.show;
               if (this.show === false) {
                 this.search = '';
-                this.updatedDisplayedOptions()
               }
             }
 
           },
           ['@click.away']() {
             this.search='';
-            this.updatedDisplayedOptions()
             this.show = false;
           }
 
@@ -167,22 +166,24 @@ Sample with multiple choice
     <option value="te_3" selected>Brentford</option>
     <option value="te_4" >C</option>
   </select>
-  <div class="field border" x-bind="component" >
-    <input x-model="text" x-bind:placeholder="placeholder" readonly/>
-    <i>arrow_drop_down</i>
-      <article
-        x-show="show"
-        style="width: 100%;margin: 0 ;display: none;z-index: 99">
-        <div class="field border " style="margin: 1rem; " x-show="showSearch">
-          <input type="text" autocomplete="off" placeholder="Filter" x-model="search" x-on:keyup.debounce="updatedDisplayedOptions()">
-          <i>search</i>
-        </div>
-        <template x-for="op in allOptions">
-        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content" x-show="op.show">
-        </a>
-          <div class="divider"></div>
-        </template>
-      </article>
+  <div x-bind="defaultComponent">
+  </div>
+<!--  <div class="field border" x-bind="component" >-->
+<!--    <input x-model="text" x-bind:placeholder="placeholder" readonly/>-->
+<!--    <i>arrow_drop_down</i>-->
+<!--      <article-->
+<!--        x-show="show"-->
+<!--        style="width: 100%;margin: 0 ;display: none;z-index: 99">-->
+<!--        <div class="field border " style="margin: 1rem; " x-show="showSearch">-->
+<!--          <input type="text" autocomplete="off" placeholder="Filter" x-model="search">-->
+<!--          <i>search</i>-->
+<!--        </div>-->
+<!--        <template x-for="op in allOptions">-->
+<!--        <a :class="{'fill':op.selected}" class="row wave" @click="toggleValue(op.value)" x-html="op.content" x-show="op.show">-->
+<!--        </a>-->
+<!--          <div class="divider"></div>-->
+<!--        </template>-->
+<!--      </article>-->
   </div>
 </div>
 
