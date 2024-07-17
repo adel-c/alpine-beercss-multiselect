@@ -55,13 +55,8 @@
         },
         updateComponent() {
           this.allOptions = this.htmlOptions().map(o => {
-            let attribute = o.attributes["data-content"];
             let text= o.innerHTML;
-            let content = text;
-            if(attribute && attribute.value){
-              content = attribute.value
-            }
-            return {value: o.value, content:content ,text: text, selected: o.selected}
+            return {value: o.value, content:text ,text: text, selected: o.selected}
           })
           this.updatedDisplayedOptions();
           const selectedOptions = this.allOptions.filter(o => o.selected);
@@ -117,7 +112,7 @@ Sample with multiple choice
   <select style="display: none" name="myselect" multiple x-ref="sourceSelect"
           @change.debounce.300ms="console.log('select updated',$event)"
   autocomplete="off">
-    <option value="te_1" data-content=" <strong>machin</strong> truc">Arsenal</option>
+    <option value="te_1">Arsenal</option>
     <option value="te_2">Aston Villa</option>
     <option value="te_3" selected>Brentford</option>
     <option value="te_4" >C</option>
