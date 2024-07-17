@@ -20,11 +20,37 @@
   <link href="https://cdn.jsdelivr.net/npm/beercss@3.6.8/dist/cdn/beer.min.css" rel="stylesheet"/>
 
   <script>
+    //@property {function(String, String):String} optionTransformer - a function that take an
+    //option value and innerHTML and return a string(and html) that will be injected in the dropdown.
     function addStrong(id, label) {
       return `<strong>${label}</strong>`;
     }
+
     document.addEventListener("alpine:init", () => {
-      Alpine.data("customSelect", (args) => ({
+      /**
+       * @typedef TransformerFunction
+       * @type {function}
+       * @param {string} value - the option value
+       * @param {string} innerHTML - the option innerHTML
+       * @return {string}    a string(and html) that will be injected in the dropdown.
+
+
+       */
+      /**
+       * @typedef customSelectArgs
+       * @type {object}
+       * @property {string} placehoder - the text displayed when no element is selected.
+       * @property {TransformerFunction} optionTransformer - a function that take an
+       *            option value and innerHTML and return a string(and html) that will be injected in the dropdown.
+
+       */
+      Alpine.data("customSelect",
+        /**
+         *
+          * @param args
+         * @return {{init(): void, htmlOptions(): HTMLOptionElement[], toggleValue(*): void, updateTextbox(): void, optionIsVisible(HTMLOptionElement): boolean, show: boolean, multiple: boolean, allOptions: Displayableoption[], search: string, component: {"@click"(*): void, "@click.away"(): void}, setSelect(*, *): void, showSearch: boolean, optionTransformer: ((function(String, String): String)|(function(*, *): *)|*|(function(*, *): *)), text: string, placeholder: (*|string), updateComponent(): void, defaultComponent: {"x-html"(): string}}}
+         */
+        (args) => ({
         /**
          * @typedef Displayableoption
          * @type {object}
@@ -36,7 +62,8 @@
 
         text: '',
         placeholder: args?.placeholder || '',
-        optionTransformer: args?.optionTransformer || ((id, text) => {
+        optionTransformer: args?.optionTransformer ||
+          ((id, text) => {
           return text
         }),
         show: false,
