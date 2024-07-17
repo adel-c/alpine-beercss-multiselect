@@ -47,6 +47,7 @@
             option.selected = false;
           }
         },
+
         toggleValue(v) {
           let options = this.htmlOptions();
           let filter = options.filter(o => o.value === v)[0];
@@ -73,12 +74,12 @@
             option.value.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
         },
         updateTextbox() {
-          const selectedOptions = this.allOptions.filter(o => o.selected);
+          const selectedOptions = this.htmlOptions()?.filter(o => o.selected);
           let selectedLength = selectedOptions.length;
           if (selectedLength === 0) {
             this.text = "";
           } else if (selectedLength === 1) {
-            this.text = selectedOptions[0].text
+            this.text = selectedOptions[0].innerHTML
           } else {
             this.text = selectedLength + " selected";
           }
@@ -106,7 +107,7 @@
           <i>search</i>
         </div>
         <ul style="list-style: none">
-        <template x-for="op in allOptions">
+        <template x-for="op in allOptions" :key="op.value">
         <li  x-show="optionIsVisible(op)"><a class="row wave"
         :class="{'fill':op.selected}"
         @click="toggleValue(op.value)"
